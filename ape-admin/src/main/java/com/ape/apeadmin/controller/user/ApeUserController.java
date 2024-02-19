@@ -6,6 +6,7 @@ import com.ape.apecommon.domain.Result;
 import com.ape.apecommon.enums.BusinessType;
 import com.ape.apecommon.enums.ResultCode;
 import com.ape.apecommon.utils.PasswordUtils;
+import com.ape.apeframework.utils.RedisUtils;
 import com.ape.apeframework.utils.ShiroUtils;
 import com.ape.apesystem.domain.ApeUser;
 import com.ape.apesystem.domain.ApeUserRole;
@@ -38,6 +39,8 @@ import java.util.List;
 @RequestMapping("/user")
 public class ApeUserController {
 
+    @Autowired
+    private RedisUtils redisUtils;
     @Autowired
     private ApeUserService apeUserService;
     @Autowired
@@ -250,6 +253,66 @@ public class ApeUserController {
             }
         } else {
             return Result.fail("请选择正确的图片格式");
+        }
+    }
+
+    @PostMapping("forgetPassword")
+    public Result forgetPassword(@RequestBody JSONObject jsonObject) {
+        String loginAccount = jsonObject.getString("loginAccount");
+        String email = jsonObject.getString("email");
+        String password = jsonObject.getString("password");
+        String code = jsonObject.getString("code").toLowerCase();
+        String s = redisUtils.get(email + "forget");
+        if (!code.equals(s)) {
+            return Result.fail("验证码错误");
+        }
+        QueryWrapper<ApeUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(ApeUser::getLoginAccount,loginAccount).last("limit 1");
+        ApeUser user = apeUserService.getOne(queryWrapper);
+        //密码加盐加密
+        String encrypt = PasswordUtils.encrypt(password);
+        String[] split = encrypt.split("\\$");
+        user.setPassword(split[0]);
+        user.setSalt(split[1]);
+        boolean update = apeUserService.updateById(user);
+        if (update) {
+            return Result.success();
+        } else {
+            return Result.fail("密码修改失败");
+        }
+    }
+
+    @GetMapping("changePassword")
+    public Result changePassword(@RequestParam("password")String password,@RequestParam("oldPassword")String oldPassword) {
+        ApeUser userInfo = ShiroUtils.getUserInfo();
+        ApeUser apeUser = apeUserService.getById(userInfo.getId());
+        boolean decrypt = PasswordUtils.decrypt(oldPassword, apeUser.getPassword() + "$" + apeUser.getSalt());
+        if (!decrypt) {
+            return Result.fail("旧密码错误！");
+        }
+        String encrypt = PasswordUtils.encrypt(password);
+        String[] split = encrypt.split("\\$");
+        apeUser.setPassword(split[0]);
+        apeUser.setSalt(split[1]);
+        apeUser.setPwdUpdateDate(new Date());
+        boolean update = apeUserService.updateById(apeUser);
+        if (update) {
+            return Result.success();
+        } else {
+            return Result.fail();
+        }
+    }
+
+    @GetMapping("changeAvatar")
+    public Result changeAvatar(@RequestParam("avatar")String avatar) {
+        ApeUser userInfo = ShiroUtils.getUserInfo();
+        ApeUser apeUser = apeUserService.getById(userInfo.getId());
+        apeUser.setAvatar(avatar);
+        boolean update = apeUserService.updateById(apeUser);
+        if (update) {
+            return Result.success();
+        } else {
+            return Result.fail();
         }
     }
 

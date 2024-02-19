@@ -22,13 +22,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author shaozhujie
@@ -127,6 +131,38 @@ public class LoginController {
         apeLoginLog.setLoginTime(new Date());
         apeLoginLog.setMsg(msg);
         eventPublisher.publishEvent(new LoginLogEvent(apeLoginLog));
+    }
+
+    @GetMapping("getEmailReg")
+    public Result getEmailReg(@RequestParam("email") String email) {
+        String str="abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ0123456789";
+        Random r=new Random();
+        String arr[]=new String [4];
+        String reg="";
+        for(int i=0;i<4;i++) {
+            int n=r.nextInt(62);
+            arr[i]=str.substring(n,n+1);
+            reg+=arr[i];
+        }
+        try {
+            redisUtils.set(email + "forget",reg.toLowerCase(),60L);
+            JavaMailSenderImpl sender = new JavaMailSenderImpl();
+            sender.setPort(25);
+            sender.setHost("smtp.qq.com");
+            sender.setUsername("1760272627@qq.com");
+            sender.setPassword("nwavnzopbtpibchc");
+            sender.setDefaultEncoding("utf-8");
+            MimeMessage msg = sender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+            helper.setFrom(sender.getUsername());
+            helper.setTo(email);
+            helper.setSubject("EL修改密码验证");
+            helper.setText("您的邮箱验证码为："+reg,true);
+            sender.send(msg);
+        }catch (Exception e){
+            Result.fail("邮件发送失败");
+        }
+        return Result.success();
     }
 
 }

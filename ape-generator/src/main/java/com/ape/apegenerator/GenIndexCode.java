@@ -225,9 +225,9 @@ public class GenIndexCode {
                 "        this.updateVisible = true\n" +
                 "      },\n" +
                 "      updateDataBtn() {\n" +
-                "        this.update(this.update[0])\n" +
+                "        this.updateData(this.update[0])\n" +
                 "      },\n" +
-                "      deleteDateBtn() {\n" +
+                "      deleteDataBtn() {\n" +
                 "        this.$confirm('确定删除选中的'+ this.remove.length +'条数据?', '提示', {\n" +
                 "          confirmButtonText: '确定',\n" +
                 "          cancelButtonText: '取消',\n" +
@@ -238,7 +238,7 @@ public class GenIndexCode {
                 "                 \n" +
                 "        });\n" +
                 "      },\n");
-        builder.append("      deleteDate(ids) {\n" + "        remove").append(apeGenTable.getClassName()).append("({ids:ids}).then(res => {\n").append("            if(res.code == 1000) {\n").append("              this.$message({\n").append("                type: 'success',\n").append("                message: '删除成功!'\n").append("              });\n").append("              this.query()\n").append("            } else {\n").append("              this.$notify.error({\n").append("                title: '错误',\n").append("                message: res.message\n").append("              });\n").append("            }\n").append("          })\n").append("      },\n").append("    },\n").append("    mounted() {\n").append("      this.query()\n").append("    }\n").append(" }\n").append("</script>\n");
+        builder.append("      deleteDate(ids) {\n" + "        remove").append(apeGenTable.getClassName()).append("({ids:ids}).then(res => {\n").append("            if(res.code == 1000) {\n").append("              this.$message({\n").append("                type: 'success',\n").append("                message: '删除成功!'\n").append("              });\n").append("              this.pageNumber = 1\n").append("              this.query()\n").append("            } else {\n").append("              this.$notify.error({\n").append("                title: '错误',\n").append("                message: res.message\n").append("              });\n").append("            }\n").append("          })\n").append("      },\n").append("    },\n").append("    mounted() {\n").append("      this.query()\n").append("    }\n").append(" }\n").append("</script>\n");
         builder.append("<style lang=scss scoped>\n" +
                 "  .search-table {\n" +
                 "      width: 100%;\n" +

@@ -45,6 +45,10 @@ public class ShiroConfig {
         filterMap.put("/login", "anon");
         filterMap.put("/user/setUserAvatar/**", "anon");
         filterMap.put("/common/uploadImg", "anon");
+        filterMap.put("/common/uploadFile", "anon");
+        filterMap.put("/user/saveUser","anon");
+        filterMap.put("/login/getEmailReg","anon");
+        filterMap.put("/user/forgetPassword","anon");
         filterMap.put("/img/**", "anon");
         filterMap.put("/video/**", "anon");
         filterMap.put("/file/**", "anon");
