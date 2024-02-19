@@ -1,9 +1,7 @@
-# back_stage_server
+# 基于SpringBoot+Vue的英语学习系统的设计与实现
 
 #### 介绍
-自用后台管理系统后端
-用户名：admin
-密码：admin
+基于SpringBoot+Vue的英语学习系统的设计与实现
 
 #### 软件架构
 软件架构说明
