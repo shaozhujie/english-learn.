@@ -39,8 +39,8 @@ public class ApeSpokenController {
         Page<ApeSpoken> page = new Page<>(apeSpoken.getPageNumber(),apeSpoken.getPageSize());
         QueryWrapper<ApeSpoken> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-                .eq(StringUtils.isNotBlank(apeSpoken.getContent()),ApeSpoken::getContent,apeSpoken.getContent())
-                .eq(StringUtils.isNotBlank(apeSpoken.getChinese()),ApeSpoken::getChinese,apeSpoken.getChinese())
+                .like(StringUtils.isNotBlank(apeSpoken.getContent()),ApeSpoken::getContent,apeSpoken.getContent())
+                .like(StringUtils.isNotBlank(apeSpoken.getChinese()),ApeSpoken::getChinese,apeSpoken.getChinese())
                 .eq(apeSpoken.getCreateTime() != null,ApeSpoken::getCreateTime,apeSpoken.getCreateTime())
                 .orderByDesc(ApeSpoken::getCreateTime);
         Page<ApeSpoken> apeSpokenPage = apeSpokenService.page(page, queryWrapper);
