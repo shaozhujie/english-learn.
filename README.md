@@ -1,6 +1,6 @@
 # SpringBoot+Vue的英语学习系统
 
-**有问题或获取源码可以咨询企鹅Q1760272627** 
+**有问题或获取源码可以咨询QQ1760272627** 
 
 **系统运行视频：**
 https://www.bilibili.com/video/BV1iz421d7UF/?vd_source=5f273f72fd3dc593e25c33cbccdad12e
@@ -15,17 +15,4 @@ SpringBoot，shiro，Mybatis-plus，Vue，redis，mysql，ElementUi，echarts
 ### 工具：
 idea，vscode，navicat
 
-### 系统截图：
-![登录](img/image.png)
-![首页](img/image1.png)
-![词汇](img/image3.png)
-![语法](img/image4.png)
-![文献](img/image5.png)
-![自测](img/image6.png)
-![听力](img/image7.png)
-![学习记录](img/image8.png)
-![讨论](img/image9.png)
-![个人中心](img/image10.png)
-![后台管理](img/image11.png)
-
-**有问题或获取源码可以咨询企鹅Q1760272627** 
+**有问题或获取源码可以咨询QQ1760272627** 
